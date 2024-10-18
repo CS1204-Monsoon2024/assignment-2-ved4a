@@ -59,7 +59,7 @@ private:
 
         for (int i = 0; i < old_capacity; i++) {
             if (old_table[i].key != 0 && !old_table[i].is_deleted) {
-                insert(old_table[i].value); // need to code up insert
+                insert(old_table[i].value);
             }
         }
     };
@@ -77,25 +77,41 @@ public:
         curr_size = 0;
     };
 
-bool insert(int value) {
-    int key = hash(value); // find key
+    bool insert(int value)
+    {
+        int key = hash(value); // find key
 
-    if ((double)curr_size / capacity >= alpha) { // check if we need to resize
-        resize_table();  // resize if load factor exceeds threshold
-    }
-
-    int i = 0;
-    while (i < capacity) {
-        int newIndex = probe(key, i);  // probe for the correct position
-        if (table[newIndex].key == 0 || table[newIndex].is_deleted) {
-            table[newIndex] = Entry(key, value);
-            curr_size++;
-            return true;
+        if ((double)curr_size / capacity >= alpha) { // check if we need to resize
+            resize_table();  // resize if load factor exceeds threshold
         }
-        i++;
-    }
-    return false;  // if unable to insert
-}
 
+        int i = 0;
+        while (i < capacity) {
+            int newIndex = probe(key, i);  // probe for the correct position
+            if (table[newIndex].key == 0 || table[newIndex].is_deleted) {
+                table[newIndex] = Entry(key, value);
+                curr_size++;
+                return true;
+            }
+            i++;
+        }
+        return false;  // if unable to insert
+    }
+
+    int search(int value) {
+        int key = hash(value);
+        int i = 0;
+        while (i < capacity) {
+            int index = probe(key, i);
+            if (table[index].key == key && !table[index].is_deleted) {
+                return table[index].value;  // Value found
+            }
+            if (table[index].key == 0 && !table[index].is_deleted) {
+                return -1;  // value not found
+            }
+            i++;
+        }
+        return -1;  // value not found
+    }
 
 };
