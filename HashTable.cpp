@@ -4,83 +4,90 @@
 
 using namespace std;
 
-class HashTable {
+class HashTable
+{
 private:
-    struct Entry {
-        int key;     // Key that is hashed
-        int value;   // Data (or value) stored in the hash table
+    struct Entry
+    {
+        int key;
+        int value;
         bool is_deleted;
 
-        Entry() { key = 0; value = 0; is_deleted = false; }
-        Entry(int key, int value) : key(key), value(value), is_deleted(false) {}
+        Entry() {key = 0, value = 0, is_deleted = false;} // default constructor
+        Entry(int key, int value) {this->key = key; this->value = value; is_deleted = false;} // constructor w initializing
     };
 
-    vector<Entry> table;
+    vector<Entry> table; // HT as a vector of Entry objects
     int curr_size;
     int capacity;
     double alpha = 0.8; // load factor
 
-    // Hash function to determine index based on key
-    int hash(int key) {
+    int hash(int key)
+    {
         return key % capacity;
-    }
+    };
 
-    bool is_prime(int num) {
+    bool is_prime(int num)
+    {
         if (num <= 1) return false;
         if (num == 2) return true;
         if (num % 2 == 0) return false;
-        for (int i = 3; i * i <= num; i += 2) {
+        for (int i = 3; i * i <= num; i += 2) { // until sqrt num
             if (num % i == 0) return false;
         }
         return true;
-    }
+    };
 
     int next_prime(int num) {
         if (num <= 2) return 2;
-        if (num % 2 == 0) num++;
+        if (num % 2 == 0) num++;  // make sure n is odd
         while (!is_prime(num)) {
-            num += 2;
+            num += 2; // increment odd numbers
         }
         return num;
-    }
+    };
 
     void resize_table() {
         int old_capacity = capacity;
-        capacity = next_prime(2 * old_capacity);
+        capacity = next_prime(2 * old_capacity); // to 2x the old capacity + ensure its prime
 
         vector<Entry> old_table = table;
-        table.clear();
-        table.resize(capacity);
+
+        table.clear(); // delete contents to allow rehashing
+        table.resize(capacity); // new table made
         curr_size = 0;
 
-        // Rehashing all old entries
         for (int i = 0; i < old_capacity; i++) {
             if (old_table[i].key != 0 && !old_table[i].is_deleted) {
-                insert(old_table[i].key, old_table[i].value);  // Reinsert with original key-value
+                insert(old_table[i].value);
             }
         }
-    }
+    };
 
-    int probe(int key, int i) {
+    int probe(int key, int i)
+    {
         return (hash(key) + (i * i)) % capacity;
-    }
+    };
 
 public:
-    HashTable(int size) {
-        capacity = next_prime(size);
+    HashTable(int size)
+    {
+        capacity = next_prime(size); // if size is alr prime nothing changes
         table.resize(capacity);
         curr_size = 0;
-    }
+    };
 
-    // Insert using a distinct key and value
-    bool insert(int key, int value) {
-        if ((double)curr_size / capacity >= alpha) {
-            resize_table();
+    bool insert(int value)
+    {
+        int key = hash(value); // find key
+
+        if ((double)curr_size / capacity >= alpha) { // check if we need to resize
+            resize_table();  // resize if load factor exceeds threshold
         }
 
         int i = 0;
         while (i < capacity) {
-            int newIndex = probe(key, i);
+            int newIndex = probe(key, i);  // probe for the correct position
             if (table[newIndex].key == 0 || table[newIndex].is_deleted) {
                 table[newIndex] = Entry(key, value);
                 curr_size++;
@@ -88,26 +95,27 @@ public:
             }
             i++;
         }
-        return false;
-    }
+        return false;  // if unable to insert
+    };
 
-    // Search for a value using its key
-    int search(int key) {
+    int search(int value) {
+        int key = hash(value);
         int i = 0;
         while (i < capacity) {
             int index = probe(key, i);
             if (table[index].key == key && !table[index].is_deleted) {
-                return table[index].value;
+                return table[index].value;  // Value found
             }
             if (table[index].key == 0 && !table[index].is_deleted) {
-                return -1;  // Key not found
+                return -1;  // value not found
             }
             i++;
         }
-        return -1;
-    }
+        return -1;  // value not found
+    };
 
-    bool remove(int key) {
+    bool remove(int value) {
+        int key = hash(value);
         int i = 0;
         while (i < capacity) {
             int index = probe(key, i);
@@ -117,21 +125,21 @@ public:
                 return true;
             }
             if (table[index].key == 0 && !table[index].is_deleted) {
-                return false;  // Key not found
+                return false;
             }
             i++;
         }
         return false;
-    }
+    };
 
     void printTable() {
         for (int i = 0; i < capacity; i++) {
             if (table[i].key != 0 && !table[i].is_deleted) {
-                cout << table[i].value << " ";
+                cout << table[i].value << " ";  // print  value at the index
             } else {
-                cout << "- ";
+                cout << "- ";  // print a dash for empty / deleted slots
             }
         }
         cout << endl;
-    }
+    };
 };
