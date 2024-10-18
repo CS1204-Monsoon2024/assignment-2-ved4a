@@ -38,6 +38,15 @@ private:
         return true;
     };
 
+    int nextPrime(int num) {
+        if (num <= 2) return 2;
+        if (num % 2 == 0) num++;  // make sure n is odd
+        while (!is_prime(num)) {
+            num += 2; // increment odd numbers
+        }
+        return num;
+    }
+
 public:
 
 };
