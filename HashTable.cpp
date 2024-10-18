@@ -47,6 +47,24 @@ private:
         return num;
     }
 
+    void resize_table() {
+        int old_capacity = capacity;
+        capacity = nextPrime(2 * old_capacity); // to 2x the old capacity + ensure its prime
+
+        vector<Entry> old_table = table;
+
+        table.clear(); // delete contents to allow rehashing
+        table.resize(capacity); // new table made
+        curr_size = 0;
+
+        for (int i = 0; i < old_capacity; i++) {
+            if (old_table[i].key != 0 && !old_table[i].is_deleted) {
+                insert(old_table[i].key, old_table[i].value); // need to code up insert
+            }
+        }
+    }
+
+
 public:
 
 };
