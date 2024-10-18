@@ -45,7 +45,7 @@ private:
             num += 2; // increment odd numbers
         }
         return num;
-    }
+    };
 
     void resize_table() {
         int old_capacity = capacity;
@@ -62,7 +62,14 @@ private:
                 insert(old_table[i].key, old_table[i].value); // need to code up insert
             }
         }
-    }
+    };
+
+    int probe(int key, int i)
+    {
+        return (hash(key) + (i * i)) % capacity;
+    };
+
+    
 
 
 public:
