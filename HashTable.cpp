@@ -77,4 +77,25 @@ public:
         curr_size = 0;
     };
 
+bool insert(int value) {
+    int key = hash(value); // find key
+
+    if ((double)curr_size / capacity >= alpha) { // check if we need to resize
+        resize_table();  // resize if load factor exceeds threshold
+    }
+
+    int i = 0;
+    while (i < capacity) {
+        int newIndex = probe(key, i);  // probe for the correct position
+        if (table[newIndex].key == 0 || table[newIndex].is_deleted) {
+            table[newIndex] = Entry(key, value);
+            curr_size++;
+            return true;
+        }
+        i++;
+    }
+    return false;  // if unable to insert
+}
+
+
 };
