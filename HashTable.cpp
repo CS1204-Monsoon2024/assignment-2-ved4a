@@ -14,7 +14,7 @@ private:
         bool is_deleted;
 
         Entry() {key = 0, value = 0, is_deleted = false;} // default constructor
-        Entry(int key, int value) {is_deleted = false;} // constructor w initializing
+        Entry(int key, int value) {this->key = key; this->value = value; is_deleted = false;} // constructor w initializing
     };
 
     vector<Entry> table; // HT as a vector of Entry objects
