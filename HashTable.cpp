@@ -59,7 +59,7 @@ private:
 
         for (int i = 0; i < old_capacity; i++) {
             if (old_table[i].key != 0 && !old_table[i].is_deleted) {
-                insert(old_table[i].key, old_table[i].value); // need to code up insert
+                insert(old_table[i].value); // need to code up insert
             }
         }
     };
