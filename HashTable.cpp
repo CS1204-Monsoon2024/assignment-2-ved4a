@@ -17,9 +17,8 @@ private:
     vector<Entry> table;
     int curr_size;
     int capacity;
-    double alpha = 0.8;  // load factor
+    double alpha = 0.8;
 
-    // Hash function to determine index
     int hash(int value) {
         return value % capacity;
     }
@@ -71,6 +70,11 @@ public:
     }
 
     bool insert(int value) {
+        if (search(value) != -1) {
+            cout << "Duplicate key insertion is not allowed" << endl;
+            return false;
+        }
+
         if ((double)curr_size / capacity >= alpha) {
             resize_table();
         }
@@ -85,6 +89,7 @@ public:
             }
             i++;
         }
+        cout << "Max probing limit reached!" << endl;
         return false;
     }
 
@@ -113,10 +118,12 @@ public:
                 return true;
             }
             if (table[index].value == 0 && !table[index].is_deleted) {
+                cout << "Element not found" << endl;
                 return false;  // Value not found
             }
             i++;
         }
+        cout << "Element not found" << endl;
         return false;
     }
 
