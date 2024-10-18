@@ -38,7 +38,7 @@ private:
         return true;
     };
 
-    int nextPrime(int num) {
+    int next_prime(int num) {
         if (num <= 2) return 2;
         if (num % 2 == 0) num++;  // make sure n is odd
         while (!is_prime(num)) {
@@ -49,7 +49,7 @@ private:
 
     void resize_table() {
         int old_capacity = capacity;
-        capacity = nextPrime(2 * old_capacity); // to 2x the old capacity + ensure its prime
+        capacity = next_prime(2 * old_capacity); // to 2x the old capacity + ensure its prime
 
         vector<Entry> old_table = table;
 
@@ -69,9 +69,12 @@ private:
         return (hash(key) + (i * i)) % capacity;
     };
 
-    
-
-
 public:
+    HashTable(int size)
+    {
+        capacity = next_prime(size); // if size is alr prime nothing changes
+        table.resize(capacity);
+        curr_size = 0;
+    };
 
 };
