@@ -114,4 +114,34 @@ public:
         return -1;  // value not found
     }
 
+    bool remove(int value) {
+        int key = hash(value);
+        int i = 0;
+        while (i < capacity) {
+            int index = probe(key, i);
+            if (table[index].key == key && !table[index].is_deleted) {
+                table[index].is_deleted = true;
+                curr_size--;
+                return true;
+            }
+            if (table[index].key == 0 && !table[index].is_deleted) {
+                return false;
+            }
+            i++;
+        }
+        return false;
+    }
+
+void printTable() {
+    for (int i = 0; i < capacity; i++) {
+        if (table[i].key != 0 && !table[i].is_deleted) {
+            cout << table[i].value << " ";  // print  value at the index
+        } else {
+            cout << "- ";  // print a dash for empty / deleted slots
+        }
+    }
+    cout << endl;
+}
+
+
 };
