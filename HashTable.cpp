@@ -96,7 +96,7 @@ public:
             i++;
         }
         return false;  // if unable to insert
-    }
+    };
 
     int search(int value) {
         int key = hash(value);
@@ -112,7 +112,7 @@ public:
             i++;
         }
         return -1;  // value not found
-    }
+    };
 
     bool remove(int value) {
         int key = hash(value);
@@ -130,18 +130,16 @@ public:
             i++;
         }
         return false;
-    }
+    };
 
-void printTable() {
-    for (int i = 0; i < capacity; i++) {
-        if (table[i].key != 0 && !table[i].is_deleted) {
-            cout << table[i].value << " ";  // print  value at the index
-        } else {
-            cout << "- ";  // print a dash for empty / deleted slots
+    void printTable() {
+        for (int i = 0; i < capacity; i++) {
+            if (table[i].key != 0 && !table[i].is_deleted) {
+                cout << table[i].value << " ";  // print  value at the index
+            } else {
+                cout << "- ";  // print a dash for empty / deleted slots
+            }
         }
-    }
-    cout << endl;
-}
-
-
+        cout << endl;
+    };
 };
